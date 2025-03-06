@@ -23,22 +23,23 @@ func TestMain(m *testing.M) {
 	bcy.Token = "$TOKEN"
 	//Create/fund the test addresses
 	var err error
-	keys1, err = bcy.GenAddrKeychain()
+	keys1, err = bcy.GenAddrKeychain(NewGenAddrKeychainParams())
 	if err != nil {
-		log.Fatal("Error generating test addresses: ", err)
+		log.Fatal("[Keys1] Error generating test addresses: ", err)
 	}
-	keys2, err = bcy.GenAddrKeychain()
+	keys2, err = bcy.GenAddrKeychain(NewGenAddrKeychainParams().SetBech32())
 	if err != nil {
-		log.Fatal("Error generating test addresses: ", err)
+		log.Fatal("[Keys2] Error generating test addresses: ", err)
 	}
 	txhash1, err = bcy.Faucet(keys1, 1e5)
 	if err != nil {
-		log.Fatal("Error funding test addresses: ", err)
+		log.Fatal("[txhash1] Error funding test addresses: ", err)
 	}
 	txhash2, err = bcy.Faucet(keys2, 2e5)
 	if err != nil {
-		log.Fatal("Error funding test addresses: ", err)
+		log.Fatal("[txhash2] Error funding test addresses: ", err)
 	}
+
 	os.Exit(m.Run())
 }
 
@@ -296,7 +297,7 @@ func TestAsset(t *testing.T) {
 	if err != nil {
 		t.Error("GenAssetKeychain error encountered: ", err)
 	}
-	funder, err := bcy.GenAddrKeychain()
+	funder, err := bcy.GenAddrKeychain(NewGenAddrKeychainParams())
 	if err != nil {
 		t.Error("GenAddrKeychain error encountered: ", err)
 	}
