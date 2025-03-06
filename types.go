@@ -2,11 +2,12 @@ package gobcy
 
 import (
 	"math/big"
+	"strconv"
 	"time"
 )
 
-//TokenUsage represents information about
-//the limits and usage against your token.
+// TokenUsage represents information about
+// the limits and usage against your token.
 type TokenUsage struct {
 	Limits      Usage          `json:"limits"`
 	Hits        Usage          `json:"hits"`
@@ -30,8 +31,8 @@ type UsageHistory struct {
 	Time time.Time `json:",omitempty"`
 }
 
-//Blockchain represents information about
-//the state of a blockchain.
+// Blockchain represents information about
+// the state of a blockchain.
 type Blockchain struct {
 	Name             string    `json:"name"`
 	Height           int       `json:"height"`
@@ -47,8 +48,8 @@ type Blockchain struct {
 	LastForkHash     string    `json:"last_fork_hash"`
 }
 
-//Block represents information about the state
-//of a given block in a blockchain.
+// Block represents information about the state
+// of a given block in a blockchain.
 type Block struct {
 	Hash         string    `json:"hash"`
 	Height       int       `json:"height"`
@@ -71,8 +72,8 @@ type Block struct {
 	NextTXs      string    `json:"next_txids"`
 }
 
-//TX represents information about the state
-//of a given transaction in a blockchain.
+// TX represents information about the state
+// of a given transaction in a blockchain.
 type TX struct {
 	BlockHash     string     `json:"block_hash,omitempty"`
 	BlockHeight   int        `json:"block_height,omitempty"`
@@ -109,7 +110,7 @@ type TX struct {
 	Outputs       []TXOutput `json:"outputs"`
 }
 
-//TXInput represents the state of a transaction input
+// TXInput represents the state of a transaction input
 type TXInput struct {
 	PrevHash    string   `json:"prev_hash,omitempty"`
 	OutputIndex int      `json:"output_index,omitempty"`
@@ -122,7 +123,7 @@ type TXInput struct {
 	WalletName  string   `json:"wallet_name,omitempty"`
 }
 
-//TXOutput represents the state of a transaction output
+// TXOutput represents the state of a transaction output
 type TXOutput struct {
 	SpentBy    string   `json:"spent_by,omitempty"`
 	Value      big.Int  `json:"value"`
@@ -133,8 +134,8 @@ type TXOutput struct {
 	DataString string   `json:"data_string,omitempty"`
 }
 
-//TXConf represents information about the
-//confidence of an unconfirmed transaction.
+// TXConf represents information about the
+// confidence of an unconfirmed transaction.
 type TXConf struct {
 	Age          int     `json:"age_millis"`
 	ReceiveCount int     `json:"receive_count,omitempty"`
@@ -142,8 +143,8 @@ type TXConf struct {
 	TXHash       string  `json:"txhash"`
 }
 
-//TXRef represents summarized data about a
-//transaction input or output.
+// TXRef represents summarized data about a
+// transaction input or output.
 type TXRef struct {
 	Address       string    `json:"address,omitempty"`
 	BlockHeight   int       `json:"block_height"`
@@ -165,10 +166,10 @@ type TXRef struct {
 	ReceivedCount big.Int   `json:"received_count,omitempty"`
 }
 
-//TXSkel represents the return call to BlockCypher's
-//txs/new endpoint, and includes error information,
-//hex transactions that need to be signed, and space
-//for the signed transactions and associated public keys.
+// TXSkel represents the return call to BlockCypher's
+// txs/new endpoint, and includes error information,
+// hex transactions that need to be signed, and space
+// for the signed transactions and associated public keys.
 type TXSkel struct {
 	Trans      TX       `json:"tx"`
 	ToSign     []string `json:"tosign"`
@@ -180,17 +181,17 @@ type TXSkel struct {
 	} `json:"errors,omitempty"`
 }
 
-//NullData represents the call and return to BlockCypher's
-//Data API, allowing you to embed up to 80 bytes into
-//a blockchain via an OP_RETURN.
+// NullData represents the call and return to BlockCypher's
+// Data API, allowing you to embed up to 80 bytes into
+// a blockchain via an OP_RETURN.
 type NullData struct {
 	Data     string `json:"data"`
 	Encoding string `json:"encoding,omitempty"`
 	Hash     string `json:"hash,omitempty"`
 }
 
-//Addr represents information about the state
-//of a public address.
+// Addr represents information about the state
+// of a public address.
 type Addr struct {
 	Address            string   `json:"address,omitempty"`
 	Wallet             Wallet   `json:"wallet,omitempty"`
@@ -211,10 +212,10 @@ type Addr struct {
 	HasMore            bool     `json:"hasMore,omitempty"`
 }
 
-//AddrKeychain represents information about a generated
-//public-private key pair from BlockCypher's address
-//generation API. Large amounts are not recommended to be
-//stored with these addresses.
+// AddrKeychain represents information about a generated
+// public-private key pair from BlockCypher's address
+// generation API. Large amounts are not recommended to be
+// stored with these addresses.
 type AddrKeychain struct {
 	Address         string   `json:"address,omitempty"`
 	Private         string   `json:"private,omitempty"`
@@ -226,17 +227,17 @@ type AddrKeychain struct {
 	OAPAddress      string   `json:"oap_address,omitempty"`
 }
 
-//Wallet represents information about a standard wallet.
-//Typically, wallets can be used wherever an address can be
-//used within the API.
+// Wallet represents information about a standard wallet.
+// Typically, wallets can be used wherever an address can be
+// used within the API.
 type Wallet struct {
 	Name      string   `json:"name,omitempty"`
 	Addresses []string `json:"addresses,omitempty"`
 }
 
-//HDWallet represents information about a Hierarchical Deterministic
-//(HD) wallet. Like regular Wallets, HDWallets can be used wherever an
-//address can be used within the API.
+// HDWallet represents information about a Hierarchical Deterministic
+// (HD) wallet. Like regular Wallets, HDWallets can be used wherever an
+// address can be used within the API.
 type HDWallet struct {
 	Name            string `json:"name,omitempty"`
 	ExtPubKey       string `json:"extended_public_key,omitempty"`
@@ -251,19 +252,19 @@ type HDWallet struct {
 	} `json:"chains,omitempty"`
 }
 
-//Hook represents a WebHook/WebSockets event.
-//BlockCypher supports the following events:
+// Hook represents a WebHook/WebSockets event.
+// BlockCypher supports the following events:
 //	Event = "unconfirmed-tx"
 //	Event = "new-block"
 //	Event = "confirmed-tx"
 //	Event = "tx-confirmation"
 //	Event = "double-spend-tx"
 //  Event = "tx-confidence"
-//Hash, Address, and Script are all optional; creating
-//a WebHook with any of them will filter the resulting
-//notifications, if appropriate. ID is returned by
-//BlockCyphers servers after Posting a new WebHook; you
-//shouldn't manually generate this field.
+// Hash, Address, and Script are all optional; creating
+// a WebHook with any of them will filter the resulting
+// notifications, if appropriate. ID is returned by
+// BlockCyphers servers after Posting a new WebHook; you
+// shouldn't manually generate this field.
 type Hook struct {
 	ID            string  `json:"id,omitempty"`
 	Event         string  `json:"event"`
@@ -277,8 +278,8 @@ type Hook struct {
 	CallbackErrs  int     `json:"callback_errors,omitempty"`
 }
 
-//PayFwd represents a reference to
-//a Payment Forwarding request.
+// PayFwd represents a reference to
+// a Payment Forwarding request.
 type PayFwd struct {
 	ID             string   `json:"id,omitempty"`
 	Destination    string   `json:"destination"`
@@ -292,8 +293,8 @@ type PayFwd struct {
 	TXHistory      []string `json:"transactions,omitempty"`
 }
 
-//Payback represents a Payment Forwarding Callback.
-//It's more fun to call it a "payback."
+// Payback represents a Payment Forwarding Callback.
+// It's more fun to call it a "payback."
 type Payback struct {
 	Value       big.Int `json:"value"`
 	Destination string  `json:"destination"`
@@ -302,8 +303,8 @@ type Payback struct {
 	InputHash   string  `json:"input_transaction_hash"`
 }
 
-//OAPIssue represents a request for issuance or transfer of
-//an Open Asset on a blockchain.
+// OAPIssue represents a request for issuance or transfer of
+// an Open Asset on a blockchain.
 type OAPIssue struct {
 	Priv     string  `json:"from_private"`
 	ToAddr   string  `json:"to_address"`
@@ -311,8 +312,8 @@ type OAPIssue struct {
 	Metadata string  `json:"metadata,omitempty"`
 }
 
-//OAPTX represents an Open Asset protocol transaction, generated
-//when issuing or transferring assets.
+// OAPTX represents an Open Asset protocol transaction, generated
+// when issuing or transferring assets.
 type OAPTX struct {
 	Ver         int       `json:"ver"`
 	AssetID     string    `json:"assetid"`
@@ -332,4 +333,23 @@ type OAPTX struct {
 		Value           big.Int `json:"value"`
 		OrigOutputIndex int     `json:"original_output_index"`
 	} `json:"outputs"`
+}
+
+type GenAddrKeychainParams struct {
+	 Bech32 bool `json:"bech32,omitempty"`
+}
+
+func NewGenAddrKeychainParams() *GenAddrKeychainParams {
+	return &GenAddrKeychainParams{}
+}
+
+// SetBech32 sets the Bech32 field to true.
+// default is false.
+func (g *GenAddrKeychainParams) SetBech32() *GenAddrKeychainParams {
+	g.Bech32 = true
+	return g
+}
+
+func (g GenAddrKeychainParams) GetURL() string {
+	return "/addrs?bech32=" + strconv.FormatBool(g.Bech32)
 }
